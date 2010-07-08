@@ -11,9 +11,9 @@
 #include <sstream>
 
 
-void hough(char* in, char* out, int resolution);
+void hough(const char* in,const char* out, int resolution);
 int  hough_hash(double x, double min, int accuracy);
-void  hough_get_min_max(char *in, int resolution, double &min, double &max);
+void  hough_get_min_max(const char *in, int resolution, double &min, double &max);
 double hough_unhash(int hash);
 
 

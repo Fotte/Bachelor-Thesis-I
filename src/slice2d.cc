@@ -360,9 +360,10 @@ int main(int argc, char *argv[]){
         //hough("2d_map_sliced_sort_cart.txt", "hokedihook.txt", 180);
         //hough("hokedihook.txt", "hook.txt", 180);
         //hough("test.file", "2d_map_sliced_lines_hook.txt", 180);
-        //grid g("2d_map_sliced_sort_cart.txt", 50);
-        grid g("grid.test", 10);
+        grid g("2d_map_sliced_sort_cart.txt", 50);
+        //grid g("grid.test", 20);
         g.print_grid("grid.txt");
+        g.grid_hough("grid.txt");
         g.free();
     }        
 }

@@ -214,7 +214,7 @@ int hough_hash(double x, double min, int accuracy)
     else return static_cast<int>((x + fabs(min)) * accuracy);
 }
 
-void  hough_get_min_max(char *in, int resolution, double &min, double &max)
+void  hough_get_min_max(const char *in, int resolution, double &min, double &max)
 {
     double x, y, theta, dist;
     ifstream source(in, std::ios::in);
@@ -247,21 +247,15 @@ double hough_unhash(int hash)
 
 }
 
-void hough(char* in, char* out, int resolution)
+void hough(const char* in, const char* out, int resolution)
 {
     double max,min;
     int accuracy = 10; // hough accuray
 
     hough_get_min_max(in, resolution, min, max);
     double x, y, theta, dist;
-    cout<<"Pre-Array1 initialized"<<endl;
     houghLine **votingMatrix = new houghLine*[resolution]; 
     int hough_size = (fabs(min) + max) * accuracy;//size of the array
-    cout<<"Pre-Array2 initialized"<<endl;
-    cout << "max " << max << " min "<< min <<  "\tresoution: " << resolution << endl;
-    cout << "arraysize: " << hough_size << endl;
-    
-    
     for(int i = 0; i < resolution; ++i)
     {
         votingMatrix[i] = new houghLine[hough_size]; 
@@ -273,7 +267,6 @@ void hough(char* in, char* out, int resolution)
             votingMatrix[i][j].set_count(-1);
         }
     }
-    cout<<"Array initialized"<<endl;
     
     ifstream source(in, std::ios::in);
     ofstream target(out, std::ios::out);
@@ -291,24 +284,27 @@ void hough(char* in, char* out, int resolution)
                 votingMatrix[i][hough_hash(dist, min, accuracy)].increase();
             } else
             {
-//                if(votingMatrix[i][hough_hash(dist, min, accuracy)].dist_to(x, y) < 150)
-  //              {// attention magic number here ;)
                     votingMatrix[i][hough_hash(dist, min, accuracy)].set_end(x,y);
                     votingMatrix[i][hough_hash(dist, min, accuracy)].increase();
-    //            }
             }
         }
 
     }
-    cout<<"Array filled"<<endl;
+    bool written = false;
     for(int i = 0; i < resolution; ++i)
     {
         for(int j = 0; j < hough_size; ++j)
         {
-            if(votingMatrix[i][j].value() > 10)
+            if(votingMatrix[i][j].value() > 2)
+            {
                 target << votingMatrix[i][j];
+                written = true;
+            }
         }
         delete votingMatrix[i];
     }
     delete [] votingMatrix;
+
+    if(!written)
+        remove(out);
 }
