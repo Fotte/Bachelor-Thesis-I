@@ -301,7 +301,7 @@ void hough(const char* in, const char* out, int resolution)
                 written = true;
             }
         }
-        delete votingMatrix[i];
+        delete[] votingMatrix[i];
     }
     delete [] votingMatrix;
 

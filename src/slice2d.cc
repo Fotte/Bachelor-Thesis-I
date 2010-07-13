@@ -15,7 +15,6 @@ using namespace std;
 
 void 
 slice2d::slice_3d_map(double from, double to, char* file){
-    int i;
     double x_val, y_val, z_val;
     ifstream source;
     source.open(file);
@@ -87,7 +86,7 @@ bool slice2d::compare_polar_points(PointPolar &a, PointPolar &b){
 
 
 void slice2d::scan_sort_polar(char *readfile, char *writefile){
-    double x,y,r,phi;
+    double x,y;
     list<PointPolar> liste;
     list<PointPolar>::iterator it;
     PointPolar p;
@@ -168,7 +167,7 @@ void slice2d::find_lines(char *file){
     
     vector<PointCartesian> line;
     
-    double phi, r, x, y, e1, e2, e3, tmp;
+    double phi, r, e1, e2, e3, tmp;
     PointCartesian p;
 
     double constr1, constr2, constr3; //constraints
@@ -177,7 +176,6 @@ void slice2d::find_lines(char *file){
     e3 = 30;
     
     while (source.good()){
-//        source >> p.x >> p.y;
         source >> phi >> r;
         p.x = r * cos(phi);
         p.y = r * sin(phi);
@@ -354,16 +352,14 @@ int main(int argc, char *argv[]){
         usage();
     else{    
         slice2d::slice_3d_map(atof(argv[1]), atof(argv[2]), argv[3]);
-        slice2d::scan_sort_cart("2d_map_sliced.txt", "2d_map_sliced_sort_cart.txt");
-        slice2d::scan_sort_polar("2d_map_sliced.txt", "2d_map_sliced_sort_polar.txt");
-        slice2d::find_circuit("2d_map_sliced_sort_polar.txt","hoods.txt");
-        //hough("2d_map_sliced_sort_cart.txt", "hokedihook.txt", 180);
-        //hough("hokedihook.txt", "hook.txt", 180);
-        //hough("test.file", "2d_map_sliced_lines_hook.txt", 180);
-        grid g("2d_map_sliced_sort_cart.txt", 50);
+        //slice2d::scan_sort_cart("2d_map_sliced.txt", "2d_map_sliced_sort_cart.txt");
+        //slice2d::scan_sort_polar("2d_map_sliced.txt", "2d_map_sliced_sort_polar.txt");
+        //slice2d::find_circuit("2d_map_sliced_sort_polar.txt","hoods.txt");
+        grid g("2d_map_sliced.txt", 50);
         //grid g("grid.test", 20);
         g.print_grid("grid.txt");
-        g.grid_hough("grid.txt");
-        g.free();
+        //g.hookers_on_the_grid("hookers_grid.txt");
+        //g.free();
+        g.find_lines();
     }        
 }
